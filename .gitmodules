@@ -1,0 +1,4 @@
+[submodule "ws/unitree_ros2_to_real"]
+	path = ws/unitree_ros2_to_real
+	url = https://github.com/harry3doz/unitree_ros2_to_real.git
+	branch = dev-hal
