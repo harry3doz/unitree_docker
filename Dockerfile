@@ -12,6 +12,9 @@ RUN apt update && apt install --no-install-recommends -y \
 
 ADD ./ws ${ROS_WS}/src
 
-EXPOSE 8080
 
 WORKDIR ${ROS_WS}
+RUN cd src/unitree_ros2_to_real  && tar xf unitree_legged_sdk.tar.gz \
+  && mv ros2_unitree_legged_msgs .. && cd ../.. 
+
+
