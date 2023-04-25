@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+
+  unitree-ros2:
+    image: unitree-ros2:humble
+    container_name: unitree-ros2 
+    network_mode: host
+    extra_hosts:
+      - "raspberrypi: 192.168.123.161"
+      - "nx: 192.168.123.15"
+      - "unitree-desktop: 192.168.123.14"
+      - "nano2gb: 192.168.123.13"
+    volumes:
+      - /tmp/.X11-unix/:/tmp/.X11-unix
+      - ${HOME}/.Xauthority:/root/.Xauthority
+    tty: true
+    privileged: true
+    stdin_open: true
+    environment:
+      DISPLAY: ${DISPLAY}
+    devices:
+      - /dev/snd
+    command: [
+      "bash", "-c", "colcon build; exec bash" 
+    ]
+
+  ros1-bridge:
+    image: ros:foxy-ros1-bridge
+    container_name: ros1-bridge 
+    network_mode: host
+    extra_hosts:
+      - "raspberrypi: 192.168.123.161"
+      - "nx: 192.168.123.15"
+      - "unitree-desktop: 192.168.123.14"
+      - "nano2gb: 192.168.123.13"
+    volumes:
+      - /tmp/.X11-unix/:/tmp/.X11-unix
+    restart: always
+    environment:
+      ROS_MASTER_URI: http://192.168.123.161:11311
+    tty: true
+    stdin_open: true
+    command: [
+      "bash", "-c", "ros2 run ros1_bridge dynamic_bridge --bridge-all-topics; exec bash" 
+    ]
